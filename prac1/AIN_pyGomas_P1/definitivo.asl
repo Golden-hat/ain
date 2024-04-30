@@ -1,9 +1,35 @@
+seguro([20, 0, 130],[130,0,240],[240,0,130],[130,0,20]). /**Puntos seguros**/
+
+
 
 +flag(F): team(200)
     <-
-        +amiesquina;
-        .goto([20, 0, 20]);
+        !calculapuntoseguro;
+        ?dist1(D1);
+        ?dist2(D2);
+        ?dist3(D3);
+        ?dist4(D4);
+        .min([D1,D2,D3,D4], Minimo)
+
+
++!calculapuntoseguro
+    <-
+        ?positio([X,Y,Z]);
+        +dist1((X-20)+(Z-20));
+        +dist2(()+())
+        +dist3(()+())
+        +dist4(()+())
+
+        .goto([125, 0, 126]);
         +miposicion([20, 0, 20])
+
++target_reached(T): alcentro
+    <-
+        -alcentro;
+        .print("He llegado al centro ", T);
+        ?flag(F);
+        .look_at(F);
+        -target_reached(T).        
 
 +friends_in_fov(ID,Type,Angle,Distance,Health,Position)
     <-
