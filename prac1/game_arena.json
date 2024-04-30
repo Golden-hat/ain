@@ -18,6 +18,13 @@
             "password": "secret",
             "amount": 1,
             "asl": "luchador.asl"
+        },
+        {
+            "rank": "BDISoldier",
+            "name": "bicharraco_yjpellam",
+            "password": "secret",
+            "amount": 1,
+            "asl": "definitivo.asl"
         }
     ],
      "allied": [

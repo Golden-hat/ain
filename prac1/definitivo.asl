@@ -1,7 +1,5 @@
 seguro([102, 0, 102],[102,0,204],[204,0,102],[204,0,102]). /**Puntos seguros**/
 
-
-
 +flag(F): team(200)
     <-
         !calculapuntoseguro;
