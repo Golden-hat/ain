@@ -1,5 +1,5 @@
 Winner Team: AXIS!
-Duration: [19843 days, 12:22:21.336654]
+Duration: [19843 days, 15:40:19.782389]
 Statistics for ALLIED TEAM
 	-GENERAL:
 		* Alive:       	0

@@ -7,7 +7,7 @@ huir**/
     !calculoPosicionRomboCercana;
     ?dist1(D1);
     ?dist2(D2);
-    ?dist3(D3);
+    ?dist3(D3);  
     ?dist4(D4);
     .min([D1,D2,D3,D4], Minimo);
 
