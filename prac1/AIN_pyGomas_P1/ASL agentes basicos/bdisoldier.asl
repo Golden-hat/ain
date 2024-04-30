@@ -1,3 +1,5 @@
+
+
 +flag(F): team(200)
 <-
 +mirando([[0,0,0],[250,0,0],[250,0,250],[0,0,250]]);
@@ -7,7 +9,7 @@
 +friends_in_fov(ID,Type,Angle,Distance,Health,Position)
 <-
 .print("Disparo");
-.shoot(3,Position).
+.shoot(4,Position).
 
 +!agirar: estado(E) & E<4
 <-
