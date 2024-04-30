@@ -9,14 +9,7 @@
             "rank": "BDISoldier",
             "name": "luchador_yjpellam",
             "password": "secret",
-            "amount": 5,
-            "asl": "luchador.asl"
-        },
-        {
-            "rank": "BDISoldier",
-            "name": "luchador2_yjpellam",
-            "password": "secret",
-            "amount": 5,
+            "amount": 10,
             "asl": "luchador.asl"
         },
         {
