@@ -5,42 +5,42 @@
     "service": "service_yjpellam",
     "service_password": "secret",
     "axis": [
-		{
+        {
             "rank": "BDISoldier",
             "name": "luchador_yjpellam",
             "password": "secret",
-            "amount": 20,
+            "amount": 5,
             "asl": "luchador.asl"
         },
         {
             "rank": "BDISoldier",
             "name": "luchador2_yjpellam",
             "password": "secret",
-            "amount": 1,
+            "amount": 5,
             "asl": "luchador.asl"
         },
         {
             "rank": "BDISoldier",
-            "name": "bicharraco_yjpellam",
+            "name": "BICHARRACO_yjpellam",
             "password": "secret",
             "amount": 1,
-            "asl": "definitivo.asl"
+            "asl": "ejemplo.asl"
         }
     ],
-     "allied": [
-                {
+    "allied": [
+        {
             "rank": "invencibleM.BDIMInvencible",
             "name": "medic_yjpellam",
             "password": "secret",
             "amount": 1,
             "asl": "medic_arena.asl"
-        }, 
+        },
         {
             "rank": "invencibleF.BDIFInvencible",
             "name": "fieldop_yjpellam",
             "password": "secret",
-            "amount": 3,
+            "amount": 1,
             "asl": "fieldop_arena.asl"
         }
-   ]
-  }
+    ]
+}
