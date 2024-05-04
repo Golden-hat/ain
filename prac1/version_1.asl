@@ -14,23 +14,13 @@ puntos_pantrulla([[80,0,127],[127,0,80],[129,0,176],[176,0,129]]).
     +puntos_pratulla(Long);
     +vigilando;
 
-    +encuentros(0); //
-    +nofijado; //
-
 
     ?health(H);
     +salud(H);
     ?ammo(A);
     +balas(A);
     
-    
     !vida;
-
-    ?min_index([dist1, dist2, dist3, dist4], Minimo, Index);
-    ?nth(Index, P, Destino);
-    .goto(Destino);
-    !!vida; //
-
 
     if(Minimo == D1){
         +punto_vigilado(0);
