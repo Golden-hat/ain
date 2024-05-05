@@ -11,7 +11,6 @@
   +patroll_point(0);
   .print("Got control points:", C).
 
-
 +target_reached(T): patrolling & team(200)
   <-
   ?patroll_point(P);

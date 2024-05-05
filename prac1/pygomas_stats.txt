@@ -1,9 +1,9 @@
 Winner Team: AXIS!
-Duration: [19843 days, 15:40:19.782389]
+Duration: [0:05:57.123251]
 Statistics for ALLIED TEAM
 	-GENERAL:
-		* Alive:       	0
-		* Avrg. Health:	0
+		* Alive:       	2
+		* Avrg. Health:	200.0
 	-OBJECTIVE:
 		* Times Taken: 	0
 		* Times Lost:  	0
@@ -35,34 +35,34 @@ Statistics for ALLIED TEAM
 
 Statistics for AXIS TEAM
 	-GENERAL:
-		* Alive:       	0
-		* Avrg. Health:	0
+		* Alive:       	6
+		* Avrg. Health:	68.66666666666667
 	-OBJECTIVE:
 		* Times Taken: 	0
 		* Times Lost:  	0
 	-SHOTS:
-		* EnemyHit:    	0
-		* TeamHit:     	0
-		* FailedHit:   	0
-		* TOTAL:       	0
+		* EnemyHit:    	5
+		* TeamHit:     	401
+		* FailedHit:   	52
+		* TOTAL:       	458
 	-MEDIC PACKS:
-		* Delivered:   	0
+		* Delivered:   	17
 		* Team Taken:  	0
-		* Enemy Taken: 	0
+		* Enemy Taken: 	11
 		* Not Taken:   	0
 
 	-AMMO PACKS:
-		* Delivered:   	0
+		* Delivered:   	17
 		* Team Taken:  	0
-		* Enemy Taken: 	0
+		* Enemy Taken: 	11
 		* Not Taken:   	0
 
 	-EFICIENCY:
-		* Medic:       	0
-		* FieldOps:    	0
-		* Army:        	0
+		* Medic:       	1.0
+		* FieldOps:    	1.0
+		* Army:        	0.9956331877729258
 	-ANTI-EFICIENCY:
-		* Medic:       	0
-		* FieldOps:    	0
-		* Army:        	0
+		* Medic:       	0.6470588235294118
+		* FieldOps:    	0.6470588235294118
+		* Army:        	0.014962593516209476
 
