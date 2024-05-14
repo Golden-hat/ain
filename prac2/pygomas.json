@@ -1,0 +1,55 @@
+{
+    "host": "gtirouter.dsic.upv.es",
+    "manager": "manager_yjpellam",
+    "manager_password": "secret",
+    "service": "service_yjpellam",
+    "service_password": "secret",
+    "axis": [
+		{
+            "rank": "BDISoldier",
+            "name": "axis_yjpellam",
+            "password": "secret",
+            "amount": 8,
+            "asl": "bdisoldier.asl"
+        },
+        {
+            "rank": "BDIMedic",
+            "name": "medic_axis_yjpellam",
+            "password": "secret",
+            "asl": "bdimedic.asl"
+        },
+        {
+            "rank": "BDIFieldOp",
+            "name": "fieldop_axis_yjpellam",
+            "password": "secret",
+            "asl": "bdifieldop.asl"
+        },
+        {
+            "rank": "drunkenMonkey.BDIDrunkenMonkey",
+            "name": "cc_DM_fieldop_axis_yjpellam",
+            "password": "secret",
+            "asl": "bdifieldop_DM.asl"
+        }
+    ],
+     "allied": [
+		{
+            "rank": "BDISoldier",
+            "name": "allied_yjpellam",
+            "password": "secret",
+            "amount": 8,
+            "asl": "bdisoldier.asl"
+        },
+        {
+            "rank": "BDIMedic",
+            "name": "medic_allied_yjpellam",
+            "password": "secret",
+            "asl": "bdimedic.asl"
+        },
+         {
+            "rank": "BDIFieldOp",
+            "name": "fieldop_allied_yjpellam",
+            "password": "secret",
+            "asl": "bdifieldop.asl"
+        }
+   ]
+  }
