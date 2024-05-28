@@ -13,8 +13,8 @@
 
 +target_reached(T): patrolling & team(200) 
   <-
-  .print("AMMOPACK!");
-  .reload;
+  .print("MEDPACK!");
+  .cure;
   ?patroll_point(P);
   -+patroll_point(P+1);
   -target_reached(T).
@@ -47,10 +47,13 @@
 
 +heading(H): exploring
   <-
-  .reload;
+  .cure;
   .wait(2000);
   .turn(0.375).
 
+//+heading(H): returning
+//  <-
+//  .print("returning").
 
 +target_reached(T): team(100)
   <- 
@@ -60,9 +63,4 @@
 
 +enemies_in_fov(ID,Type,Angle,Distance,Health,Position)
   <- 
-  ?destination(D);
-  .print("Drunken Monkey Old Destination: ", D);
-  .drunkenMonkey;
-  ?destination(D1);
-  .print("Drunken Monkey New Destination: ", D1);
   .shoot(3,Position).
