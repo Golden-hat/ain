@@ -25,7 +25,7 @@ target_reached(T): team 200
     .goto(P).
 
 /*Da vueltas para comprobar si hay alguien a la vista*/
-+comprobar: team(200) & position([X,Y,Z])
++check: team(200) & position([X,Y,Z])
   <-
   .look_at([X+1,Y,Z]);
   .wait(400);
@@ -37,7 +37,7 @@ target_reached(T): team 200
   .wait(400);
   ?objetivo(O);
   .look_at(O);
-  -comprobar.
+  -check.
 
 /*Le llega un send, que le indica que vaya al centro. El centro se refiere a la posición de la bandara. Una vez allí se encarga de activar el modo combate*/
 +venAlCentro:f(F)
@@ -47,12 +47,12 @@ target_reached(T): team 200
   .print("Entendido");
   .look_at(F).
 
-/*Cuando esta en el centro, empieza a generar botiquines*/
+/*Cuando esta en el centro, empieza a generar botiquines y lanza comprobar, creencia que lo pone a dar vueltas para observar lo que ocurre*/
 +target_reached(T): combate
  <-
  .reload;
  +crearMunicion;
- +comprobar.
+ +check.
 
 /*Empieza a crear paquetes de municion sin parar cada 4 segundos, tenemos que poner un delay porque necesitan un tiempo mínimo para recargar la stamina*/
 +crearMunicion
