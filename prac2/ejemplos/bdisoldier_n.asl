@@ -207,5 +207,4 @@
  .goto([X,Y,Z]);
  -+combate;
 
-/** ===================================================================== **/
 +ponercombate <- -+combate; -ponercombate; .print("Entrando en combate!!!").
