@@ -121,7 +121,8 @@ class BDITropa(BDIFieldOp, BDITroop):
                     if dist(pos[i], flag) < d:
                         mi = pos[i]
                 return mi
-
+            
+            #Acciones que realiza el líder unicamente
             @actions.add_function(".defencePOS", (tuple, ))
             def _defencePOS(flagPOS):
                 '''
