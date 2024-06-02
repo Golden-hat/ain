@@ -46,8 +46,7 @@
  .goto(D);
 
 
-/** Cuando llega a su posicion de patrulla, da una vuelta de 360grados para ver 
-si encuentra a alguien, y sino, pues sigue movimientos aleatorios **/
+/* Cuando llega a su posicion de patrulla, da una vuelta para ver si encuentra algún enemigo, si no sige con la patrulla */
 +target_reached(T):team(200) & seguir & not combate
   <-
   +check;
