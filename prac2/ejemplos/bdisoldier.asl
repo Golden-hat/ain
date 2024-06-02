@@ -59,33 +59,33 @@
   !apatrullandoLaCiudad.
 
 /** Los que no son torre, patrullan alrededor dando vueltas aleatoriamente**/
-+target_reached(T): team(200) & alCentro & not laTorre & not modoWAR
++target_reached(T): team(200) & alCentro & not laTorre & not combate
   <-
   -alCentro;
   !apatrullar.
 
-+!apatrullar: team(200) & flag(F) & position(P) & not modoWAR
++!apatrullar: team(200) & flag(F) & position(P) & not combate
  <-
- -modoWAR;
+ -combate;
  -+seguir;
  .next(P, F, D);
  .goto(D);
  .print("Voy a ", D).
 
-+!apatrullar: team(200) & not modoWAR
++!apatrullar: team(200) & not combate
   <-
   .print("F").
 
 /** Cuando llega a su posicion de patrulla, da una vuelta de 360grados para ver 
 si encuentra a alguien, y sino, pues sigue movimientos aleatorios **/
-+target_reached(T):team(200) & seguir & not modoWAR
++target_reached(T):team(200) & seguir & not combate
   <-
   +comprobar;
   !apatrullar.
 
 /** Cuando esta en pelea, y llega a su objetivo, da una vuelta de 360 con la intención de encontrar al 
 enemigo y seguir disparandole, o encontrar un enemigo nuevo **/
-+target_reached(T):team(200) & modoWAR
++target_reached(T):team(200) & combate
   <-
   -amenaza(_);
   -eliminar;
@@ -96,14 +96,14 @@ enemigo y seguir disparandole, o encontrar un enemigo nuevo **/
 
 
 /** Patrulla mientras no vea un objetivo dando vueltas de 360 grados sobre su eje mientras no vea a 
-un objetivo, en cual caso estaria en modoWAR **/
-+!apatrullandoLaCiudad:team(200) & not modoWAR
+un objetivo, en cual caso estaria en combate **/
++!apatrullandoLaCiudad:team(200) & not combate
   <-
   +comprobar;
   .wait(2100);
   !apatrullandoLaCiudad.
 
-+!apatrullandoLaCiudad:team(200) & modoWAR
++!apatrullandoLaCiudad:team(200) & combate
   <-
   .print("Apatrullando la ciudad  F").
 
@@ -130,13 +130,13 @@ un enemigo, al cual se puede detectar con tiempo suficiente **/
 
 /** ==========================================  Enemigos y ataques =========================================**/
 /** Primer contacto con un enemigo:
-- se activa modoWAR 
+- se activa combate 
 - se manda al fieldop al centro
 - se da una vuelta alrededor para llamar a agentes compañeros para que asistan a ayudar 
 **/
-+enemies_in_fov(ID, TYPE, ANGLE, DIST, HEALTH, [X,Y,Z]):team(200) & not modoWAR & coronelli(C)
++enemies_in_fov(ID, TYPE, ANGLE, DIST, HEALTH, [X,Y,Z]):team(200) & not combate & coronelli(C)
  <-
- +modoWAR;
+ +combate;
  -+checking;
  .goto([X,Y,Z]);
  -+tg(ID);
@@ -151,7 +151,7 @@ un enemigo, al cual se puede detectar con tiempo suficiente **/
 
 /** =========================================================MODO GUERRA =====================================================================***/
 /** Si no va al centro por munición o vida, seguirá disparandole al objetivo y equilibrando su vision al objetivo **/
-+enemies_in_fov(ID, TYPE, ANGLE, DIST, HEALTH, [X,Y,Z]):team(200) & modoWAR & not gallina 
++enemies_in_fov(ID, TYPE, ANGLE, DIST, HEALTH, [X,Y,Z]):team(200) & combate & not gallina 
  <-
   -+estadoAlerta(0);
   -+objetivo([X,Y,Z]);
@@ -161,7 +161,7 @@ un enemigo, al cual se puede detectar con tiempo suficiente **/
 
 /** Se calcula la distancia con el objetivo, y en caso de que este cerca, se le dispararán mas veces.
 Fijese que ya que posición puede fallar a la hora de llamarla, por concurrencia, este metodo esta separado del anterior **/
-+enemies_in_fov(ID, TYPE, ANGLE, DIST, HEALTH, [X,Y,Z]):team(200) & modoWAR & position(P)
++enemies_in_fov(ID, TYPE, ANGLE, DIST, HEALTH, [X,Y,Z]):team(200) & combate & position(P)
   <-
   .distance([X,Y,Z], P, D);
   if(D > 30){
@@ -177,7 +177,7 @@ Fijese que ya que posición puede fallar a la hora de llamarla, por concurrencia
 /** Bucle para comprobar en caso del modo guerra la vida y la municion para saber si hay que ir a por ella o no.
 > como se llama a position, health y ammo, puede no entrar al chekck, asi pues, se implemento una creencia auxiliar que hará de
 bucle en caso de que la principal falle **/
-+check: team(200) & modoWAR & ammo(A) & health(H) & not gallina & position(P) & objetivo(O)
++check: team(200) & combate & ammo(A) & health(H) & not gallina & position(P) & objetivo(O)
   <-
   /*.wait(3000);*/
   -check;
@@ -202,7 +202,7 @@ bucle en caso de que la principal falle **/
 /** Debugger, por si no hay amenaza o el agente se queda pillado, pues poder continuar con su labor,
 utiliza el contador estado alarma que se resetea cada vez que detecta algo, si no se resetea, empezara a 
 dirigirse al centro, luego inentará apatrullar, si lo consigue, seguirá apatrullando **/
-+checking: team(200) & estadoAlerta(E) & modoWAR
++checking: team(200) & estadoAlerta(E) & combate
   <- 
   .wait(2000);
   -+estadoAlerta(E +1);
@@ -257,7 +257,7 @@ ya que hay una creencia de enemigos en vista aun activa **/
 /** Sirve para cuando encuentra a un amigo a la hora de pedir ayuda, así pues, le pedira que se venga a escoltarlo, 
 en este punto tenemos la comunicacion entre agentes para prestar ayuda uno a otro, ya que ir de unos cuantos en unos cuantos 
 es mas concervador y potencialmente mejor que todos juntos y morir a la vez. Es una estrategia de ataque al desgaste **/
-+friends_in_fov(ID, TYPE, ANGLE, DIST, HEALTH, [X,Y,Z]):team(200) & modoWAR & soldados(SS)
++friends_in_fov(ID, TYPE, ANGLE, DIST, HEALTH, [X,Y,Z]):team(200) & combate & soldados(SS)
   <-
   .nth(ID, SS,S);
   .send(S, tell, ayudame([X,Y,Z]));
@@ -265,11 +265,11 @@ es mas concervador y potencialmente mejor que todos juntos y morir a la vez. Es 
 
 /** Se activa cuando algun agente l epide ayuda, asi pues, va en su ayuda siempre y cuando el mismo no esté en guerra,
 en cual caso, no le hará caso y lo dejará morir**/
-+ayudame([X,Y,Z])[source(S)]: team(200) & not modoWAR
++ayudame([X,Y,Z])[source(S)]: team(200) & not combate
  <-
  .look_at([X,Y,Z]);
  .goto([X,Y,Z]);
- -+modoWAR;
+ -+combate;
  .print("VOY!").
 
 
@@ -279,4 +279,4 @@ en cual caso, no le hará caso y lo dejará morir**/
 
 
 /** ===================================================================== **/
-+ponerModoWar <- -+modoWAR; -ponerModoWar; .print("Entrando en combate!!!").
++ponercombate <- -+combate; -ponercombate; .print("Entrando en combate!!!").

@@ -5,6 +5,7 @@ from spade.template import Template
 from spade.message import Message
 from pygomas.bditroop import BDITroop
 from pygomas.bdifieldop import BDIFieldOp
+from pygomas.bdimedic import BDIMedic
 from agentspeak import Actions
 from agentspeak import grounded
 from agentspeak.stdlib import actions as asp_action
