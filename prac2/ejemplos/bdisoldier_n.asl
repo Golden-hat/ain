@@ -116,8 +116,6 @@ un enemigo, al cual se puede detectar con tiempo suficiente **/
  .print("Entrando en combate!").
  /*.send(B, tell, sos([X,Y,Z], HEALTH)).*/
 
-
-
 /** =========================================================MODO GUERRA =====================================================================***/
 /** Si no va al centro por munición o vida, seguirá disparandole al objetivo y equilibrando su vision al objetivo **/
 +enemies_in_fov(ID, TYPE, ANGLE, DIST, HEALTH, [X,Y,Z]):team(200) & combate & not huir 
@@ -161,6 +159,7 @@ bucle en caso de que la principal falle **/
     ?coronelli(C);
     .send(C, tell, help(P));
   }.
+
 +bucle 
   <- 
   -+check; 
@@ -168,34 +167,30 @@ bucle en caso de que la principal falle **/
   -+bucle.
 
 
-/** Debugger, por si no hay amenaza o el agente se queda pillado, pues poder continuar con su labor,
-utiliza el contador estado alarma que se resetea cada vez que detecta algo, si no se resetea, empezara a 
-dirigirse al centro, luego inentará patrullar, si lo consigue, seguirá apatrullando **/
-+checking: team(200) & estadoAlerta(E) & combate
-  <- 
-  .wait(2000);
-  -+estadoAlerta(E +1);
-  if( E > 3){
-    -+estadoAlerta(0);
-    -amenaza;
-    ?flag(F);
-    .goto(F);
-    !patrullar;
-    +check;
-  } 
-  -+checking.
+// /** Debugger, por si no hay amenaza o el agente se queda pillado, pues poder continuar con su labor,
+// utiliza el contador estado alarma que se resetea cada vez que detecta algo, si no se resetea, empezara a 
+// dirigirse al centro, luego inentará patrullar, si lo consigue, seguirá apatrullando **/
+// +checking: team(200) & estadoAlerta(E) & combate
+//   <- 
+//   .wait(2000);
+//   -+estadoAlerta(E +1);
+//   if( E > 3){
+//     -+estadoAlerta(0);
+//     -amenaza;
+//     ?flag(F);
+//     .goto(F);
+//     !patrullar;
+//     +check;
+//   } 
+//   -+checking.
 
-/** El Fieldop propone el punto de reunion para darle los paquetes de municion, si el agente no lo recibe, ira
-al centro, donde está toda la munición, se activa modo huir mientras dura el viaje a por munición, asi pues
-el agente no se desviará a otros estimulos **/
 +reunion(P)[source(S)]: team(200)
   <-
   -+reuniendose;
   +huir;
   .goto(P);
-  .print("OK, voy a la reunión!").
 
-/** Llegado al punto de reunión, el agente va a por paquetes, da una vueta para localizarlos**/
+/* El agente va a por paquetes y da una vuelta para localizarlos cuando llega al punto*/
 +target_reached(T):reuniendose
   <-
   -reuniendose;
@@ -213,9 +208,6 @@ el agente no se desviará a otros estimulos **/
   .look_at([X,Y,Z]);
   .print("Vamos por paquete").
 
-/** Llega al paquete y desactiva modo huir, con lo que puede volver a combatir,
-durante su trayectoria por el paquete, podria disparar a agentes que estan delante de el
-ya que hay una creencia de enemigos en vista aun activa **/
 +target_reached(T): aporpaquete
   <-
   -aporpaquete;
@@ -223,29 +215,18 @@ ya que hay una creencia de enemigos en vista aun activa **/
   .print("Paquete cogido");
   +check.
 
-/** Sirve para cuando encuentra a un amigo a la hora de pedir ayuda, así pues, le pedira que se venga a escoltarlo, 
-en este punto tenemos la comunicacion entre agentes para prestar ayuda uno a otro, ya que ir de unos cuantos en unos cuantos 
-es mas concervador y potencialmente mejor que todos juntos y morir a la vez. Es una estrategia de ataque al desgaste **/
+/* Pide ayuda a sus amigos, */ 
 +friends_in_fov(ID, TYPE, ANGLE, DIST, HEALTH, [X,Y,Z]):team(200) & combate & soldados(SS)
   <-
   .nth(ID, SS,S);
   .send(S, tell, ayudame([X,Y,Z]));
-  .print("AYUDADME!!").
 
-/** Se activa cuando algun agente l epide ayuda, asi pues, va en su ayuda siempre y cuando el mismo no esté en guerra,
-en cual caso, no le hará caso y lo dejará morir**/
+/* Llama a alguien para que venga a asistir*/
 +ayudame([X,Y,Z])[source(S)]: team(200) & not combate
  <-
  .look_at([X,Y,Z]);
  .goto([X,Y,Z]);
  -+combate;
- .print("VOY!").
-
-
-
-
-
-
 
 /** ===================================================================== **/
 +ponercombate <- -+combate; -ponercombate; .print("Entrando en combate!!!").

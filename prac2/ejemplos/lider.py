@@ -3,20 +3,21 @@ from loguru import logger
 from spade.behaviour import OneShotBehaviour
 from spade.template import Template
 from spade.message import Message
-from pygomas.bditroop import BDITroop
-from pygomas.bdifieldop import BDIFieldOp
-from pygomas.bdimedic import BDIMedic
+from pygomas.agents.bditroop import BDITroop
+from pygomas.agents.bdifieldop import BDIFieldOp
+from pygomas.agents.bdimedic import BDIMedic
 from agentspeak import Actions
 from agentspeak import grounded
 from agentspeak.stdlib import actions as asp_action
 from pygomas.ontology import HEALTH
+import random
 import random as rnd
 from pygomas.ontology import DESTINATION
 import math
 import random
-from pygomas.agent import LONG_RECEIVE_WAIT
+from pygomas.agents import LONG_RECEIVE_WAIT
 
-class BDITropa(BDIFieldOp, BDITroop):
+class BDITropa(BDIFieldOp, BDITroop, BDIMedic):
 
         def add_custom_actions(self, actions):
             super().add_custom_actions(actions)

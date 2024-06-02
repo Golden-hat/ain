@@ -44,15 +44,15 @@ para que en un futuro no explote **/
   -comprobar.
 
 /** Va al centro cuando lo llaman y activa modoWAR**/
-+venAlCentro:f(F)
++veteAlCentro([X,Y,Z])[source(S)]:flag(F) & not modoWAR
   <-
   +modoWAR;
+  +objetivo([X,Y,Z]);
   .goto(F);
-  .print("Entendido");
-  .look_at(F).
-
+  .print("[Coronel]: Voy al centro!!!").
+  
 /** Cuando esta en el centro, empieza a generar botiquines **/
-+target_reached(T): modoWAR
++target_reached(T): combate
  <-
  .cure;
  +crearPaquetes;

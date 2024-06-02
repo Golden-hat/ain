@@ -3,8 +3,9 @@ from loguru import logger
 from spade.behaviour import OneShotBehaviour
 from spade.template import Template
 from spade.message import Message
-from pygomas.bditroop import BDITroop
-from pygomas.bdifieldop import BDIFieldOp
+from pygomas.agents.bditroop import BDITroop
+from pygomas.agents.bdifieldop import BDIFieldOp
+from pygomas.agents.bdimedic import BDIMedic
 from agentspeak import Actions
 from agentspeak import grounded
 from agentspeak.stdlib import actions as asp_action
@@ -12,7 +13,7 @@ from pygomas.ontology import HEALTH
 import random
 from pygomas.ontology import DESTINATION
 
-from pygomas.agent import LONG_RECEIVE_WAIT
+from pygomas.agents import LONG_RECEIVE_WAIT
 
 class BDITropa(BDIFieldOp, BDITroop):
 
