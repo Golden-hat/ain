@@ -33,7 +33,7 @@
   !patrullandoEnemigos.
 
 /*Aquellos soldados que no son fijos, los mandamos a patrullar de forma aleatoria*/
-+target_reached(T): team(200) & alCentro & not laTorre & not combate
++target_reached(T): team(200) & alCentro & not Fijo & not combate
   <-
   -alCentro;
   !patrullar.
@@ -52,34 +52,26 @@
   +check;
   !patrullar.
 
-/** Cuando esta en pelea, y llega a su objetivo, da una vuelta de 360 con la intención de encontrar al 
-enemigo y seguir disparandole, o encontrar un enemigo nuevo **/
+/*cuando está en combate y consige llegar al objetivo, da una vuelta buscando enemigos. Trata de encontrar enemigos y dispararlos*/
 +target_reached(T):team(200) & combate
   <-
   -amenaza(_);
   -eliminar;
   +check;
-  .print("FIN").
+ 
+/*fin patrulla fuera de combate*/
 
-/** ============================  fin patrulla aleatoria ===========================**/
 
-
-/** Patrulla mientras no vea un objetivo dando vueltas de 360 grados sobre su eje mientras no vea a 
-un objetivo, en cual caso estaria en combate **/
+/*Patrulla, mientras no encuentro a ningún enemigo, da vueltas sobre si mismo, realiza una pausa para asegurarse de encontrar*/
 +!patrullandoEnemigos:team(200) & not combate
   <-
   +check;
   .wait(2100);
   !patrullandoEnemigos.
 
-+!patrullandoEnemigos:team(200) & combate
-  <-
-  .print("Apatrullando la ciudad  F").
++Fijo <- .print("Fijo").
 
-+laTorre <- .print("UPS").
-
-/** Metodo usado en la practica primera para dar vueltas sobre el eje del agente en busqueda de 
-un enemigo, al cual se puede detectar con tiempo suficiente **/
+/*Vueltas sobre si mismo, segmento de código de las diapositivas de la primera parte de la práctica*/
 +check: team(200) & position([X,Y,Z])
   <-
   /*.print("Vuelta de reconocimiento");*/
@@ -96,14 +88,8 @@ un enemigo, al cual se puede detectar con tiempo suficiente **/
   -check.
 
 
-
-/** ==========================================  Enemigos y ataques =========================================**/
-/** Primer contacto con un enemigo:
-- se activa combate 
-- se manda al fieldop al centro
-- se da una vuelta alrededor para llamar a agentes compañeros para que asistan a ayudar 
-**/
-+enemies_in_fov(ID, TYPE, ANGLE, DIST, HEALTH, [X,Y,Z]):team(200) & not combate & coronelli(C)
+/*Cuando entra en combate, lo primero que hace es activar la creencia combate, seguidamente manda el capitan/médico al centro y alerta a los otros compañeros que acudan a ayudar*/
++enemies_in_fov(ID, TYPE, ANGLE, DIST, HEALTH, [X,Y,Z]):team(200) & not combate & captain(C)
  <-
  +combate;
  -+checking;
@@ -114,12 +100,8 @@ un enemigo, al cual se puede detectar con tiempo suficiente **/
  +check;
  .send(C, tell, veteAlCentro([X,Y,Z]));
  .print("Entrando en combate!").
- /*.send(B, tell, sos([X,Y,Z], HEALTH)).*/
 
-
-
-/** =========================================================MODO GUERRA =====================================================================***/
-/** Si no va al centro por munición o vida, seguirá disparandole al objetivo y equilibrando su vision al objetivo **/
+/*Cuando esta en combate y no tiene que huir, ya que tiene vida y munición sige disparando al enemigo*/
 +enemies_in_fov(ID, TYPE, ANGLE, DIST, HEALTH, [X,Y,Z]):team(200) & combate & not huir 
  <-
   -+estadoAlerta(0);
@@ -128,24 +110,19 @@ un enemigo, al cual se puede detectar con tiempo suficiente **/
   .goto([X,Y,Z]);
   .shoot(1, [X,Y,Z]).
 
-/** Se calcula la distancia con el objetivo, y en caso de que este cerca, se le dispararán mas veces.
-Fijese que ya que posición puede fallar a la hora de llamarla, por concurrencia, este metodo esta separado del anterior **/
+/*Comprueba la distacia con el objetivo, si la distancia es pequeña, entonces incrementa el ataque, ya que sabemos que no se trata de un falso ataque*/
 +enemies_in_fov(ID, TYPE, ANGLE, DIST, HEALTH, [X,Y,Z]):team(200) & combate & position(P)
   <-
   .distance([X,Y,Z], P, D);
   if(D > 30){
-    /*.goto([X,Y,Z]);*/
     .look_at([X,Y,Z]);
   };
   if(D < 20){
-    .print("Esta aqui!");
     .look_at([X,Y,Z]);
     .shoot(5, [X,Y,Z]);
   }.
 
-/** Bucle para comprobar en caso del modo guerra la vida y la municion para saber si hay que ir a por ella o no.
-> como se llama a position, health y ammo, puede no entrar al chekck, asi pues, se implemento una creencia auxiliar que hará de
-bucle en caso de que la principal falle **/
+/*Bucle constante que se encarga de comprobar la vida y la munición. También sabemos si tiene que ir a por los paquetes o si se acerca el fieldops o el médico.*/
 +check: team(200) & combate & ammo(A) & health(H) & not huir & position(P) & objetivo(O)
   <-
   /*.wait(3000);*/
@@ -155,12 +132,13 @@ bucle en caso de que la principal falle **/
   if(H < 40 | A < 20){
     +huir;
     +reuniendose;
-    .print("Saliendo por patas...");
     ?flag(F);
     .goto(F);
-    ?coronelli(C);
+    ?captain(C);
     .send(C, tell, help(P));
   }.
+
+/*Realiza la comporabación de check de forma continua con un pequeño delay*/
 +bucle 
   <- 
   -+check; 
