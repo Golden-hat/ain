@@ -113,7 +113,7 @@
 /*Comprueba la distacia con el objetivo, si la distancia es pequeña, entonces incrementa el ataque, ya que sabemos que no se trata de un falso ataque*/
 +enemies_in_fov(ID, TYPE, ANGLE, DIST, HEALTH, [X,Y,Z]):team(200) & combate & position(P)
   <-
-  .distance([X,Y,Z], P, D);
+  .distancia([X,Y,Z], P, D);
   if(D > 30){
     .look_at([X,Y,Z]);
   };

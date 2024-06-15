@@ -22,107 +22,90 @@ class BDITropa(BDIFieldOp, BDITroop, BDIMedic):
         def add_custom_actions(self, actions):
             super().add_custom_actions(actions)
 
-        
-            @actions.add_function(".distance", (tuple,tuple, ))
-            def _distance(p1, p2):
-                '''
-                    distance between two points
-                '''
+           @actions.add_function(".distancia", (tuple,tuple, ))
+            def _distancia(p1, p2):
+                "Devuelve la distancia Euclidea que hay entre dos puntos"
                 return ((p1[0]-p2[0])**2+(p1[2]-p2[2])**2)**0.5
 
-            @actions.add_function(".flagTaken", ())
-            def _flagTaken():
-                '''
-                    @rerturn 1 if the flag is taken, else  0
-                '''
+            @actions.add_function(".distanciaMedia", (tuple,tuple, ))
+            def _distanciaMedia(p1, p2):
+                "Devuelve la distancia media que hay entre dos puntos"
+                return ((p1[0] + p2[0])/2, 0, (p1[2]+ p2[2])/2)
+
+            @actions.add_function(".banderaTomada", ())
+            def _banderaTomada():
+                "Función que le permite conocer a un agente cuando le han robado la bandera 1, cuando la han robado 0 en caso contrario"
                 return 1 if self.is_objective_carried else 0
                 
-            @actions.add_function(".soldiers",())
-            def _soldiers():
-                '''
-                    Returns the number of alive soldiers
-                '''
+            @actions.add_function(".soldados",())
+            def _soldados():
+                "Devuelve el número de doldados vivos"
                 return self.soldiers_count
             
-            @actions.add_function(".distMedia", (tuple,tuple, ))
-            def _distMedia(p1, p2):
-                '''
-                    Mean distance between two points
-                '''
-                return ((p1[0] + p2[0])/2, 0, (p1[2]+ p2[2])/2)
-            
-            @actions.add_function(".delF",(tuple,))
-            def _delF(t):
-                '''
-                    Returns the list without 0 index element
-                '''
-                return t[1:]
-
             @actions.add_function(".canGO", (tuple, ))
-            def _canGO(position):
-                '''
-                    Looks if the agent can got to the position or not, 
-                    very grateful when you need to know if the wall are there
-                '''
+            def _canGo(position):
+                "Método que nos permite conocer si dada una posición el viaje hasta dicha posición es posible"
                 
                 X, Y, Z = position
                 return 1 if self.map.can_walk(X, Z) else 0
             
             @actions.add_function(".tryGO", (tuple, tuple, ))
             def _tryGO(position, posEnemy):
-                '''
-                    Looks if we can move to the position, if yes, we move there, 
-                    if not, we just move to the enemy position
-                '''
+                "Comprueba si es posible moverse a una posición, en caso de serlo se desplaza hasta ella, en caso contrario no y se desplaza hasta la posición de un enemigo"
                 X, Y, Z = position
                 if self.map.can_walk(X,Z):
-                    print("We can go !")
                     return position
                 else:
                     return posEnemy
+        
+            @actions.add_function(".centradoEn", ())
+            def _centradoEn():
+                "Devuelve el Id del agente en el que se está centrando"
+                return self.aimed_agent
 
-
-            @actions.add_function(".next", (tuple,tuple, ))
             def _next(pos, flag):
-                '''
-                    Gives the next possible point to go randomly
-                '''
+                "Devuelve el valor de la próxima posible posición"
                 (px, py, pz) = pos
                 (fx, fy, fz) = flag
-                points  = [(px, pz), (fx, fz)]
 
                 def dist(p1, p2):
                     return ((p1[0]-p2[0])**2+(p1[1]-p2[1])**2)**0.5
+
+                while True:
+
+                    pnx = px + random.randint(-50,50)
+                    pnz= pz + random.randint(-50,50)
+
+                    if self.map.can_walk(p1, p2) and 20 < dist((p1, p2), (fx, fz)) <= 50: 
+                        "Si la nueva posición es visitable y además cumple que se encuentra a una distancia entre 20 y 50 unidades de la bandera, rompemos el bucle"
+                        break
                 
-                for i in range(len(points)):
-                    p1 = points[i][0] + random.randint(10,10)
-                    p2 = points[i][1] + random.randint(10,10)
-                    while(not self.map.can_walk(p1, p2) and dist((p1, p2),(fx, fz)) > 80):
-                        p1 = points[i][0] + random.randint(10,10)
-                        p2 = points[i][1] + random.randint(10,10)
-                
-                return (p1, 0, p2)
-        
-            @actions.add_function(".focusedAT", ())
-            def _focusedAT():
-                '''
-                    Returns the agent ID of the agent or None
-                ''' 
-                return self.aimed_agent
+                "La coordeanda y no cambia porque no tenemos altura"
+                return (pnx, 0, pnz)
             
-            @actions.add_function(".focuseAT", (tuple,tuple ))
-            def _focuseAT(pos, flag):
-                '''
-                    Returns the agent ID of the nearest to flag
-                ''' 
+
+            "Acciones únicas para el líder"
+
+            @actions.add_function(".delF",(tuple,))
+            def _delF(t):
+                "Elimina último elemento de la lista"
+
+                "Implementado ya que algunas listas nos estaban causando problemas para manejarlas debido a elementos vacíos"
+                return t[1:]
+
+            @actions.add_function(".centradoEn", (tuple,tuple ))
+            def _centradoEn(pos, flag):
+                "Devuelve el ID del agentes más cercano a la bandear"
+                
+                
                 def dist(p1, p2):
                     return ((p1[0]-p2[0])**2+(p1[2]-p2[2])**2)**0.5
-                mi = flag
+                npos = flag
                 d = 200
                 for i in range(len(pos)):
                     if dist(pos[i], flag) < d:
-                        mi = pos[i]
-                return mi
+                        npos = pos[i]
+                return npos
             
             #Acciones que realiza el líder unicamente
             @actions.add_function(".defencePOS", (tuple, ))
