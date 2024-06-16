@@ -170,7 +170,7 @@ i(0).
 <- 
   .print("Voy a por un paquete de vida!", M);
   .nth(T, M, Med);
-  .distMedia(F, P, O);
+  .distanciaMedia(F, P, O);
   .goto(O);
   .send(Med, tell, ayudando);
   .send(Med, tell, ayuda(O));
@@ -180,4 +180,4 @@ i(0).
 <-
   .print("voy a por paquete");
   .goto(Position);
-  +locked
+  +locked.

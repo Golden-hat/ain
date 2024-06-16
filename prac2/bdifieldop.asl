@@ -20,7 +20,7 @@ i(0).
 +repartirPOS:team(200) & flag(F) & soldados(B) & medicos(M)
 <-
   .print("Repartiendo posiciones:");
-  .defencePOS(F, Po);
+  .defensa(F, Po);
 
   -+i(0);
   while(i(I) & I < 4) {
