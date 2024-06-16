@@ -15,17 +15,18 @@
   .send(C, tell, registrarM).
 
 // VIGILAR EL CENTRO // 
-+target_reached(T): team(200)
++target_reached(T): team(200) & not ayudando
   <-
   .print("Estoy en el centro");
-  .cure;
+  +cure;
   +crearPaquete.
 
-+target_reached(T): team(200) & flag(F) & ayudando
++target_reached(T): team(200) & flag(F) & ayudando & locked
   <-
   +cure;
+  -locked;
   -ayudando;
-  goto(F).
+  .goto(F).
 
 +crearPaquete: team(200) & position([X,Y,Z]) & not ayudando
   <-
@@ -41,8 +42,8 @@
   .wait(400);
   -+crearPaquete.
 
-+ayuda(Punto)[source(S)]: team(200) & ayudando & flag(F)
++ayuda(Punto)[source(S)]: team(200) & ayudando & flag(F) & not locked
   <-
   .goto(Punto);
-  +punto;
+  +locked;
   .print("Entendido, ahora te ayudo! ", Punto, "!").

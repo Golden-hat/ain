@@ -10,18 +10,18 @@ i(0).
 
 +flag (F):team(200)
   <-
-  .get_backups;
-  .get_medics;
+  .register_service("batalla");
+  .wait(2000);
+  .get_service("capitan");
+  .wait(1500);
 
   ?health(H);
   +vidaIni(H);
   ?ammo(A);
   +balasIni(A);
 
-  .register_service("batalla");
-  .wait(2000);
-  .get_service("capitan");
-  .wait(1500);
+  .get_backups;
+  .get_medics;
   .goto(F).
 
 +capitan(C): team(200) 
