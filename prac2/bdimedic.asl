@@ -1,66 +1,48 @@
-//TEAM_AXIS
+// DEFENSORES //
 
-+flag (F): team(200) 
-  <-
-  .create_control_points(F,25,3,C);
-  +control_points(C);
-  .length(C,L);
-  +total_control_points(L);
-  +patrolling;
-  +patroll_point(0);
-  .print("Got control points").
-
-
-+target_reached(T): patrolling & team(200) 
-  <-
-  .print("MEDPACK!");
-  .cure;
-  ?patroll_point(P);
-  -+patroll_point(P+1);
-  -target_reached(T).
-
-+patroll_point(P): total_control_points(T) & P<T 
-  <-
-  ?control_points(C);
-  .nth(P,C,A);
-  .goto(A).
-
-+patroll_point(P): total_control_points(T) & P==T
-  <-
-  -patroll_point(P);
-  +patroll_point(0).
-
-
-//TEAM_ALLIED 
-
-+flag (F): team(100) 
-  <-
++flag(F): team(200)
+<- 
+  .get_service("capitan");
+  .wait(2000);
+  .get_backups;
+  .get_medics;
+  .wait(1500);
   .goto(F).
 
-+flag_taken: team(100) 
++capitan(C): team(200) 
   <-
-  .print("In ASL, TEAM_ALLIED flag_taken");
-  ?base(B);
-  +returning;
-  .goto(B);
-  -exploring.
+  +capitanAux(C);
+  .send(C, tell, registrarM).
 
-+heading(H): exploring
+// VIGILAR EL CENTRO // 
++target_reached(T): team(200)
   <-
+  .print("Estoy en el centro");
   .cure;
-  .wait(2000);
-  .turn(0.375).
+  +crearPaquete.
 
-//+heading(H): returning
-//  <-
-//  .print("returning").
++target_reached(T): team(200) & flag(F) & ayudando
+  <-
+  +cure;
+  -ayudando;
+  goto(F).
 
-+target_reached(T): team(100)
-  <- 
-  .print("target_reached");
-  +exploring;
-  .turn(0.375).
++crearPaquete: team(200) & position([X,Y,Z]) & not ayudando
+  <-
+  .print("Doy vueltas.");
+  .wait(4000);
+  .look_at([X+1,Y,Z]);
+  .wait(400);
+  .look_at([X-1,Y,Z]);
+  .wait(400);
+  .look_at([X,Y,Z+1]);
+  .wait(400);
+  .look_at([X,Y,Z-1]);
+  .wait(400);
+  -+crearPaquete.
 
-+enemies_in_fov(ID,Type,Angle,Distance,Health,Position)
-  <- 
-  .shoot(3,Position).
++ayuda(Punto)[source(S)]: team(200) & ayudando & flag(F)
+  <-
+  .goto(Punto);
+  +punto;
+  .print("Entendido, ahora te ayudo! ", Punto, "!").

@@ -1,21 +1,12 @@
-import json
-import random
 from loguru import logger
-from spade.behaviour import OneShotBehaviour
-from spade.template import Template
-from spade.message import Message
 from pygomas.agents.bditroop import BDITroop
 from pygomas.agents.bdifieldop import BDIFieldOp
-from agentspeak import Actions
-from agentspeak import grounded
-from agentspeak.stdlib import actions as asp_action
-from pygomas.ontology import Belief
+from pygomas.agents.bdimedic import BDIMedic
+import random
 
-from pygomas.agents.agent import LONG_RECEIVE_WAIT
+class BDITropa(BDIFieldOp, BDITroop):
 
-class BDIDrunkenMonkey(BDIFieldOp):
-
-      def add_custom_actions(self, actions):
+        def add_custom_actions(self, actions):
             super().add_custom_actions(actions)
 
         
@@ -120,66 +111,71 @@ class BDIDrunkenMonkey(BDIFieldOp):
                         mi = pos[i]
                 return mi
 
+            # MÉTODOS LÍDER # 
+
+            # * La formación inicial será un Hexágono irregular
+            #   alrededor de la bandera. Se ajustará si la posición
+            #   de este hexágono no es posible por la existencia de paredes
+            #   u obstáculos
+            # 
+            # * # 
             @actions.add_function(".defencePOS", (tuple, ))
             def _defencePOS(flagPOS):
-                '''
-                    Given the agents list and the flag position, 
-                    we'll calculate 4 positions of defence in circle,
-                    with the minimum distance between the agents so they could 
-                    come fast to help, the final list will be the 4 positions for agents.
-
-                    Also we know that the view range of agents are 50v.p, so the remaining
-                    distance will be 24 v.p between agents, if not, this distance will
-                    decrease.
-                '''
                 fX, fY, fZ = flagPOS
 
-                positions = []
-                cc = 25#17 # CC == CO
+                dist = 20
                 print("[ L ]: The flag is at [",fX,",",fZ,"]" )
                    
-                x = 0; z = 0
-                i = 0
-                # left up
-                x = fX - cc
-                z = fZ + cc
-                while not self.map.can_walk(fX - cc, fZ + cc):
-                    x = fX - cc + i
-                    z = fZ + cc - i
-                    i += 1
+                x = 0; z = 0; i = 0
+
+                # izq arriba
+                x = fX - dist
+                z = fZ + dist
+                while not self.map.can_walk(fX - dist, fZ + dist):
+                    x = fX - dist + i; z = fZ + dist - i; i += 1
                 pos1 = (x, 0, z)    
 
                 i = 0
-                # right up
-                x = fX + cc
-                z = fZ + cc
-                while not self.map.can_walk(fX - cc, fZ + cc):
-                    x = fX + cc - i
-                    z = fZ + cc - i
-                    i += 1
+                # derecha arriba
+                x = fX + dist
+                z = fZ + dist
+                while not self.map.can_walk(fX - dist, fZ + dist):
+                    x = fX + dist - i; z = fZ + dist - i; i += 1
                 pos2 = (x, 0, z) 
 
                 i = 0
-                # left down
-                x = fX - cc
-                z = fZ - cc
-                while not self.map.can_walk(fX - cc, fZ + cc):
-                    x = fX - cc + i
-                    z = fZ - cc + i
-                    i += 1
-                pos4 = (x, 0, z) 
-
-                i = 0
-                # right down
-                x = fX + cc
-                z = fZ - cc
-                while not self.map.can_walk(fX - cc, fZ + cc):
-                    x = fX + cc - i
-                    z = fZ - cc + i
-                    i += 1
+                # izquierda abajo
+                x = fX - dist
+                z = fZ - dist
+                while not self.map.can_walk(fX - dist, fZ + dist):
+                    x = fX - dist + i; z = fZ - dist + i; i += 1
                 pos3 = (x, 0, z) 
 
-                print("Puntos: ", pos1, pos2, pos3, pos4)
-                return (pos1, pos2, pos3, pos4)
+                i = 0
+                # derecha abajo
+                x = fX + dist
+                z = fZ - dist
+                while not self.map.can_walk(fX - dist, fZ + dist):
+                    x = fX + dist - i; z = fZ - dist + i; i += 1
+                pos4 = (x, 0, z) 
 
-            
+                # punto izquierda
+                x = fX - 1.5*dist
+                z = fZ
+                while not self.map.can_walk(fX - dist, fZ + dist):
+                    x = fX - 1.5*dist - i; i += 1
+                pos5 = (x, 0, z) 
+
+                # punto derecha
+                x = fX + 1.5*dist
+                z = fZ
+                while not self.map.can_walk(fX - dist, fZ + dist):
+                    x = fX + 1.5*dist + i; i += 1
+                pos6 = (x, 0, z) 
+
+                return (pos1, pos2, pos3, pos4, pos5, pos6)
+
+
+
+
+

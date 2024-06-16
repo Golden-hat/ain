@@ -9,21 +9,19 @@
             "rank": "soldados.BDITropa",
             "name": "axis_yjpellam",
             "password": "secret",
-            "amount": 7,
+            "amount": 12,
             "asl": "bdisoldier.asl"
         },
         {
             "rank": "BDIMedic",
             "name": "medic_axis_yjpellam",
             "password": "secret",
-            "amount": 2,
             "asl": "bdimedic.asl"
         },
          {
             "rank": "lider.BDITropa",
             "name": "fieldop_axis_yjpellam",
             "password": "secret",
-            "amount": 1,
             "asl": "bdifieldop.asl"
         }
     ],

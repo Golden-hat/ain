@@ -13,11 +13,9 @@ tambien se inicia la reparticion de posiciones **/
   .print("Empezando el Fieldop ");
   .look_at(F);
   .goto(F);
-  .wait(5000);
+  .wait(3000);
   .get_backups;
   .get_medics;
-  .wait(4000);
-  +uno;
   +repartirPOS.
 
 /** modo normal =============================================***/
@@ -49,9 +47,8 @@ su posterior posible uso **/
 +registrar[source(S)]:team(200) & soldados(SS)
   <-
   -registrar;
-  .concat(SS, [S], L);
+  .concat(SS, [source(S)], L);
   -+soldados(L).
-
 
 /** Se obtiene la posicion de cada vigilante, y si no hay amenaza, el fieldop
 ira dando vueltas de uno en uno dejandoles la municion al lado, por si en caso de 
