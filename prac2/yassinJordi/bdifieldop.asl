@@ -20,20 +20,19 @@ i(0).
 +repartirPOS:team(200) & flag(F) & soldados(B) & medicos(M)
 <-
   .print("Repartiendo posiciones:");
-  .defencePOS(F, Po);
+  .defensa(F, Po);
 
   -+i(0);
-  while(i(I) & I < 6) {
+  while(i(I) & I < 4) {
     .wait(1000);
+    .print(B);
     .nth(I, Po, P1);
     .wait(1000);
-    .nth(I, B, Sold); .send(Sold, tell, moverA(P1)); .send(Sold, tell, laTorre);
+    .nth(I, B, Sold); .send(Sold, tell, moverA(P1)); .send(Sold, tell, vigila);
     -+i(I+1);
   }
   -repartirPOS;
   .wait(2000);
-  .nth(0, M, Med);
-  .send(Med, tell, instanciarRecorrido(Po));
   .print("Posiciones repartidas...").
 
 +registrarS[source(S)]:team(200) & soldados(SS)
@@ -50,21 +49,21 @@ i(0).
   -+medicos(L).
 
 +veteAlCentro([X,Y,Z])[source(S)]:flag(F)
-  <-
+<-
   +objetivo([X,Y,Z]);
   .goto(F);
   .print("Voy al centro!!!").
 
 // VIGILAR EL CENTRO // 
 +target_reached(T): team(200)
-  <-
+<-
   .print("Estoy en el centro");
   //.send(M, tell, venAlCentro);
   .reload;
   +crearMunicion.
 
 +crearMunicion: team(200) & position([X,Y,Z])
-  <-
+<-
   .print("Doy vueltas.");
   .wait(4000);
   .look_at([X+1,Y,Z]);
@@ -76,9 +75,3 @@ i(0).
   .look_at([X,Y,Z-1]);
   .wait(400);
   -+crearMunicion.
-
-/** Como último recurso, el fieldop se pondrá también a disparar**/ 
-+enemies_in_fov(ID, TYPE, ANGLE, DIST, HEALTH, [X,Y,Z]):team(200)
- <-
-  .look_at([X,Y,Z]);
-  .shoot(5, [X,Y,Z]).

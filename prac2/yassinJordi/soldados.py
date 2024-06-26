@@ -1,91 +1,36 @@
 from loguru import logger
 from pygomas.agents.bditroop import BDITroop
 from pygomas.agents.bdifieldop import BDIFieldOp
-from agentspeak.stdlib import actions as asp_action
+from pygomas.agents.bdimedic import BDIMedic
 import random
 
 class BDITropa(BDIFieldOp, BDITroop):
 
         def add_custom_actions(self, actions):
             super().add_custom_actions(actions)
-
         
-            @actions.add_function(".distance", (tuple,tuple, ))
-            def _distance(p1, p2):
-                '''
-                    Returns the number of alive soldiers
-                '''
-                return ((p1[0]-p2[0])**2+(p1[2]-p2[2])**2)**0.5
-
-            @actions.add_function(".distMedia", (tuple,tuple, ))
-            def _distMedia(p1, p2):
-                '''
-                    Mean distance between two points
-                '''
+            @actions.add_function(".distanciaMedia", (tuple,tuple, ))
+            def _distanciaMedia(p1, p2):
+                "Devuelve la distancia media que hay entre dos puntos"
                 return ((p1[0] + p2[0])/2, 0, (p1[2]+ p2[2])/2)
-
-            @actions.add_function(".flagTaken", ())
-            def _flagTaken():
-                '''
-                    @rerturn 1 if the flag is taken, else  0
-                '''
-                return 1 if self.is_objective_carried else 0
-                
-            @actions.add_function(".soldiers",())
-            def _soldiers():
-                '''
-                    Returns the number of alive soldiers
-                '''
-                return self.soldiers_count
-
-            @actions.add_function(".canGO", (tuple, ))
-            def _canGO(position):
-                '''
-                    Looks if the agent can got to the position or not, 
-                    very grateful when you need to know if the wall are there
-                '''
-                
-                X, Y, Z = position
-                return 1 if self.map.can_walk(X, Z) else 0
             
-            @actions.add_function(".tryGO", (tuple, tuple, ))
-            def _tryGO(position, posEnemy):
-                '''
-                    Looks if we can move to the position, if yes, we move there, 
-                    if not, we just move to the enemy position
-                '''
-                X, Y, Z = position
-                if self.map.can_walk(X,Z):
-                    print("We can go !")
-                    return position
-                else:
-                    return posEnemy
-        
-            @actions.add_function(".focusedAT", ())
-            def _focusedAT():
-                '''
-                    Returns the agent ID of the agent or None
-                ''' 
-                return self.aimed_agent
-
             @actions.add_function(".next", (tuple,tuple, ))
             def _next(pos, flag):
-                '''
-                    Gives the next possible point to go randomly
-                '''
+                # Devuelve el valor de la próxima posible posición 
                 (px, py, pz) = pos
                 (fx, fy, fz) = flag
 
                 def dist(p1, p2):
                     return ((p1[0]-p2[0])**2+(p1[1]-p2[1])**2)**0.5
 
-                p1 = px + random.randint(-100,100)
-                p2 = pz + random.randint(-100,100)
-                while(not self.map.can_walk(p1, p2) or (dist((p1, p2),(fx, fz)) > 70) or (dist((p1, p2),(fx, fz)) < 20)):
-                    p1 = px + random.randint(-100,100)
-                    p2 = pz + random.randint(-100,100)
-                print(">",p1 ,",",p2, "DIST: ", dist((p1, p2),(fx, fz)))
-                return (p1, 0, p2)
-            
+                while True:
 
+                    pnx = px + random.randint(-50,50)
+                    pnz= pz + random.randint(-50,50)
 
+                    if self.map.can_walk(pnx, pnz) and 20 < dist((pnx, pnz), (fx, fz)) <= 50: 
+                        # Si la nueva posición es visitable y además cumple que se encuentra a una distancia entre 20 y 50 unidades de la bandera, rompemos el bucle 
+                        break
+                
+                "La coordenada y no cambia porque no tenemos altura"
+                return (pnx, 0, pnz)
